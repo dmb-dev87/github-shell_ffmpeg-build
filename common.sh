@@ -8,7 +8,7 @@ FFMPEG_CONFIGURE_FLAGS=(
     --disable-shared
     --enable-static
     --enable-pic
-
+    --disable-ffplay
     --disable-doc
     --disable-debug
     --disable-avdevice
