@@ -5,6 +5,10 @@ set -eux
 cd $(dirname $0)
 BASE_DIR=$(pwd)
 
+
+./build-lame.sh
+
+
 source common.sh
 
 if [ ! -e $FFMPEG_TARBALL ]

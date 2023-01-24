@@ -7,14 +7,12 @@ BASE_DIR=$(pwd)
 
 source common.sh
 
-echo "building lame"
-./build-lame.sh
-
 
 if [ ! -e $FFMPEG_TARBALL ]
 then
 	curl -s -L -O $FFMPEG_TARBALL_URL
 fi
+ARCH="x86_64"
 
 : ${ARCH?}
 
@@ -79,6 +77,21 @@ cd $BUILD_DIR
 tar --strip-components=1 -xf $BASE_DIR/$FFMPEG_TARBALL
 
 FFMPEG_CONFIGURE_FLAGS+=(--prefix=$BASE_DIR/$OUTPUT_DIR)
+
+# Build lame
+PREFIX=$BASE_DIR/$OUTPUT_DIR
+do_svn_checkout https://svn.code.sf.net/p/lame/svn/trunk/lame lame_svn
+  cd lame_svn
+    echo "Compiling lame: prefix $PREFIX"
+    ./configure --enable-nasm --disable-decoder --prefix=$PREFIX
+    make -j8
+    make install
+  cd ..
+echo "compiled LAME... " 
+
+echo "configure ffmpeg: "
+echo "${FFMPEG_CONFIGURE_FLAGS[@]}"
+
 
 ./configure "${FFMPEG_CONFIGURE_FLAGS[@]}" || (cat ffbuild/config.log && exit 1)
 

@@ -4,6 +4,10 @@ set -eu
 
 cd $(dirname $0)
 BASE_DIR=$(pwd)
+PREFIX="$BASE_DIR/PREFIX"
+
+mkdir $PREFIX
+echo "Prefix=$PREFIX"
 
 do_svn_checkout() {
   repo_url="$1"
@@ -39,9 +43,9 @@ build_mpg123() {
 build_lame() {
   do_svn_checkout https://svn.code.sf.net/p/lame/svn/trunk/lame lame_svn
   cd lame_svn
-    ./configure --enable-nasm --disable-decoder
+    ./configure --enable-nasm --disable-decoder --prefix=${PREFIX}
     make -j8
-    # make install
+    make install
   cd ..
 }
 
