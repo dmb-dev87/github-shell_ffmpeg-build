@@ -41,7 +41,7 @@ build_lame() {
   cd lame_svn
     ./configure --enable-nasm --disable-decoder
     make -j8
-    make install
+    # make install
   cd ..
 }
 
