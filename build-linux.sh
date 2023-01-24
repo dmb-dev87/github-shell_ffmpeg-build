@@ -7,6 +7,10 @@ BASE_DIR=$(pwd)
 
 source common.sh
 
+echo "building lame"
+./build-lame.sh
+
+
 if [ ! -e $FFMPEG_TARBALL ]
 then
 	curl -s -L -O $FFMPEG_TARBALL_URL

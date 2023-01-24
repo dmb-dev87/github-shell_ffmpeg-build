@@ -33,6 +33,7 @@ FFMPEG_CONFIGURE_FLAGS=(
 --enable-demuxer=mp3
 --enable-demuxer=apng
 --enable-demuxer=mjpeg
+--enable-libmp3lame
 --enable-debug=3
 --disable-optimizations
 --disable-ffplay

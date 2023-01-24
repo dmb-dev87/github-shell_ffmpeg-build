@@ -19,7 +19,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update -y && \
-          sudo apt-get install -y yasm
+          sudo apt-get install -y yasm subversion
       - name: Install ARM64 compiler
         if: env.ARCH == 'arm64'
         run: |
@@ -46,7 +46,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update -y && \
-          sudo apt-get install -y yasm mingw-w64
+          sudo apt-get install -y yasm mingw-w64 subversion
       - name: Build
         run: ./build-windows.sh
       - name: Archive production artifacts
