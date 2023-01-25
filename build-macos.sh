@@ -2,6 +2,8 @@
 
 set -eux
 
+exit 0  # For testing, temporarily turning off mac building.... 
+
 cd $(dirname $0)
 BASE_DIR=$(pwd)
 

@@ -12,7 +12,6 @@ if [ ! -e $FFMPEG_TARBALL ]
 then
 	curl -s -L -O $FFMPEG_TARBALL_URL
 fi
-ARCH="x86_64"
 
 : ${ARCH?}
 
