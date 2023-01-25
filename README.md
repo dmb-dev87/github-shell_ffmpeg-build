@@ -1,3 +1,23 @@
+OpenAudible FFmpeg builds
+===============================
+
+
+This fork attempts to add the LibLAME library to the build and also disables more ffmpeg features. 
+
+The project uses GitHub Actions to attempt to build all platforms with every code commit. Linux is working. The original source is also working, but doesn't include any libraries. 
+
+Need to fix the build scripts for Mac and Windows. 
+
+Current errors are shown in the Actions section for this repo. 
+
+Looking for assistance fixing and testing to produce static binaries for Mac Aarch64, and x86-64 for Linux, Mac and Windows. 
+
+Project is done when the buildActions complete successfully. Will be able to test each build. 
+
+Any assistance welcome! 
+
+Original read me below:
+
 Static audio-only FFmpeg builds
 ===============================
 
