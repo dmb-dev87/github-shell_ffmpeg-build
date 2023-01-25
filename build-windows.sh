@@ -30,6 +30,27 @@ FFMPEG_CONFIGURE_FLAGS+=(
     --cross-prefix=$ARCH-w64-mingw32-
 )
 
+# Build lame
+PREFIX=$BASE_DIR/$OUTPUT_DIR
+FFMPEG_CONFIGURE_FLAGS+=(--prefix=$PREFIX)
+
+
+do_svn_checkout https://svn.code.sf.net/p/lame/svn/trunk/lame lame_svn
+  cd lame_svn
+    echo "Compiling lame: prefix $PREFIX"
+    ./configure --enable-nasm --disable-decoder --prefix=$PREFIX --enable-static --disable-shared
+    make -j8
+    make install
+  cd ..
+echo "compiled LAME... "
+
+
+FFMPEG_CONFIGURE_FLAGS+=(--extra-cflags="-I$PREFIX/include")
+FFMPEG_CONFIGURE_FLAGS+=(--extra-ldflags="-L$PREFIX/lib")
+
+echo "configure ffmpeg: ${FFMPEG_CONFIGURE_FLAGS[@]}"
+
+
 ./configure "${FFMPEG_CONFIGURE_FLAGS[@]}"
 make
 make install
