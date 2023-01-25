@@ -1,6 +1,21 @@
 Static audio-only FFmpeg builds
 ===============================
 
+
+This fork attempts to add the LibLAME library to the build and also disables more ffmpeg features. 
+
+Currently broken... does not properly compile lame for each ARCH. 
+
+
+Looking for assistance fixing and testing to produce static binaries for Mac Aarch64, and x86-64 for Linux, Mac and Windows. 
+
+Project is done when the buildActions complete successfully. Will be able to test each build. 
+
+Any assistance welcome! 
+
+Original read me below:
+
+
 This project contains scripts for small static audio-only FFmpeg builds that are used
 for Chromaprint packaging.
 
