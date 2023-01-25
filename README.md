@@ -1,4 +1,4 @@
-Static audio-only FFmpeg builds
+OpenAudible FFmpeg builds
 ===============================
 
 
@@ -15,6 +15,8 @@ Any assistance welcome!
 
 Original read me below:
 
+Static audio-only FFmpeg builds
+===============================
 
 This project contains scripts for small static audio-only FFmpeg builds that are used
 for Chromaprint packaging.
