@@ -2,7 +2,7 @@
 
 set -eux
 
-exit 0  # For testing, temporarily turning off mac building.... 
+# TODO: Compile and link LAME using ARCH. Add include/lib paths for LAME to ffmpeg configure flats. Add required LAME to ff
 
 cd $(dirname $0)
 BASE_DIR=$(pwd)
