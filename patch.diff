@@ -1,0 +1,19 @@
+4088,4105d4087
+<     // BEGIN PATCH 
+<     if (1)
+<     {
+<         const char * prefix="atom:";
+<         // Add patch to allow insertion of additional meta data into apple itunes
+<         // Only inserts meta (strings) if metadata starts with prefix = atom:
+<         const AVDictionaryEntry *t = NULL;     // OA
+<         const char * fourcc_name;
+<         while (t = av_dict_iterate(s->metadata, t)) {
+<             fourcc_name = strstr(t->key, prefix);
+<             if (!fourcc_name) continue;
+<             fourcc_name+=5;
+<             if (strlen(fourcc_name)==4)
+<                 mov_write_string_metadata(s, pb, fourcc_name, t->key, 1);
+<         }
+<     }
+<     // END PATCH 
+< 
