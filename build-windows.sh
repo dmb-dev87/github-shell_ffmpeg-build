@@ -4,6 +4,9 @@ set -eu
 
 cd $(dirname $0)
 BASE_DIR=$(pwd)
+echo "step1......"
+
+echo $BASE_DIR
 
 source common.sh
 
