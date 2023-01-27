@@ -33,7 +33,7 @@ jobs:
           path: artifacts/
 
   package-windows:
-    runs-on: windows-latest
+    runs-on: ubuntu-20.04
     strategy:
       matrix:
         arch:
