@@ -25,16 +25,18 @@ do_svn_checkout() {
   fi
 }
 
+# Args: configure options, configure env
+# Not yet used.
 build_lame()
 {
-do_svn_checkout https://svn.code.sf.net/p/lame/svn/trunk/lame lame_svn
+  do_svn_checkout https://svn.code.sf.net/p/lame/svn/trunk/lame lame_svn
   cd lame_svn
     echo "Compiling lame with config: $1"
-    ./configure "$1"
+    $2 ./configure "$1"
     make -j8
     make install
   cd ..
-echo "compiled LAME... $PREFIX "
+  echo "compiled LAME... $PREFIX "
 }
 
 

@@ -36,14 +36,11 @@ FFMPEG_CONFIGURE_FLAGS+=(
 
 )
 
-echo "test ./configure ${FFMPEG_CONFIGURE_FLAGS[@]}"
-
 
 # Build lame
 PREFIX=$BASE_DIR/$OUTPUT_DIR
 FFMPEG_CONFIGURE_FLAGS+=(--prefix=$PREFIX)
 
-build_lame "--disable-decoder --prefix=$PREFIX --enable-static --disable-shared --host=$host"
 
 do_svn_checkout https://svn.code.sf.net/p/lame/svn/trunk/lame lame_svn
   cd lame_svn
@@ -52,25 +49,11 @@ do_svn_checkout https://svn.code.sf.net/p/lame/svn/trunk/lame lame_svn
     make -j8
     make install
   cd ..
-echo "compiled LAME... $PREFIX "
+echo "compiled LAME... "
 
-find $PREFIX 
-
-echo "./configure ${FFMPEG_CONFIGURE_FLAGS[@]}"
-PL=$PREFIX/lib
-ls -la $PL
-file $PL/libmp3lame.a
-pwd && ls
-
-FFMPEG_CONFIGURE_FLAGS+=(--extra-cflags="-I$PREFIX/include")
-# FFMPEG_CONFIGURE_FLAGS+=(--extra-ldflags="-L$PREFIX/lib")
-# echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH"
-
-# LD_LIBRARY_PATH+=" $PREFIX/lib"
 
 echo "configure ffmpeg: ${FFMPEG_CONFIGURE_FLAGS[@]}"
 
-set -x
 
 ./configure "${FFMPEG_CONFIGURE_FLAGS[@]}"
 make
