@@ -35,11 +35,12 @@ echo "CF=$CF"
 
 FFMPEG_CONFIGURE_FLAGS+=(
     --prefix=$PREFIX
-    --extra-cflags='-static -static-libgcc -static-libstdc++ -I/data/dev/ff/ffmpeg-build/artifacts/ffmpeg-5.1.2-audio-x86_64-w64-mingw32/include'
     --extra-ldflags=-L$PREFIX/lib
     --target-os=mingw32
     --arch=$ARCH
     --cross-prefix=$ARCH-w64-mingw32-
+    --extra-cflags="-static -static-libgcc -static-libstdc++ -I$PREFIX/include"
+
 )
 
 echo "test ./configure ${FFMPEG_CONFIGURE_FLAGS[@]}"

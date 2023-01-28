@@ -22,8 +22,7 @@ fi
 #           - arm64-apple-macos11
 
 
-TARGET="arm64-apple-macos11"
-: ${TARGET?}
+#: ${TARGET?}
 
 case $TARGET in
     x86_64-*)
@@ -42,8 +41,13 @@ esac
 
 OUTPUT_DIR=artifacts/ffmpeg-$FFMPEG_VERSION-audio-$TARGET
 
-BUILD_DIR=$BASE_DIR/$(mktemp -d workdir.XXXXXXXX)
-# TODO: takeout trap 'rm -rf $BUILD_DIR' EXIT
+# BUILD_DIR=$BASE_DIR/$(mktemp -d workdir.XXXXXXXX)
+BUILD_DIR=$BASE_DIR/workdir.$TARGET
+rm -rf $BUILD_DIR
+mkdir $BUILD_DIR
+
+
+# TODO: takeout trap 'echo "failed $BUILD_DR " && rm -rf $BUILD_DIR' EXIT
 
 cd $BUILD_DIR
 tar --strip-components=1 -xf $BASE_DIR/$FFMPEG_TARBALL
@@ -57,6 +61,7 @@ FFMPEG_CONFIGURE_FLAGS+=(
     --extra-ldflags="-target $TARGET -L$PREFIX/lib"
     --extra-cflags="-target $TARGET -I$PREFIX/include"
     --enable-runtime-cpudetect
+
 )
 
 
@@ -67,13 +72,24 @@ PREFIX=$BASE_DIR/$OUTPUT_DIR
 
 do_svn_checkout https://svn.code.sf.net/p/lame/svn/trunk/lame lame_svn
   cd lame_svn
-    echo "Compiling lame: prefix $PREFIX"
-    ./configure --enable-nasm --disable-decoder --disable-frontend --prefix=$PREFIX --enable-static --disable-shared --host=$host
+  LAMEC="--enable-nasm --disable-decoder --enable-frontend --prefix=$PREFIX --enable-static --disable-shared --host=$host --enable-cross-compile --target=$TARGET"
+  echo "*** ./configure $LAMEC"
 
-    make -j8
-    make install
+  CFLAGS="-target $TARGET -I$PREFIX/include " ./configure $LAMEC
+
+  make -j8
+  make install
+
+  # Here we can test the library file and make sure it is arm64 or x86_64 
+  lipo -info $BASE_DIR/$OUTPUT_DIR/lib/libmp3lame.a
+
+
   cd ..
-echo "compiled LAME... "
+echo "compiled LAME...$LAMEC "
+echo "pwd=`pwd`"
+
+
+lipo -info $BASE_DIR/$OUTPUT_DIR/lib/libmp3lame.a
 
 echo "configure ffmpeg: ${FFMPEG_CONFIGURE_FLAGS[@]}"
 
