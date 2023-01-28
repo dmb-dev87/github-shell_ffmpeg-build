@@ -96,12 +96,16 @@ jobs:
             tar czf release/$name.tar.gz -C $(dirname $dir) $name
           done
 
-          set -x
-          find . -wholename "*/bin/ff*" -exec tar -rvf release/allbin.tar {} +
-          tar -czvf release/allbin.tar.tar.gz allbin.tar
-          rm release/allbin.tar
-          set +x
           
+          # this isn't working. Getting error tar: release: file changed as we read it
+          # Goal was to get all copies of ffmpeg and ffprobe into one tar. 
+          set -x
+          find . -wholename "*/bin/ff*"
+          # find . -wholename "*/bin/ff*" -exec tar -rvf release/allbin.tar {} +
+          # tar -czvf release/allbin.tar.tar.gz allbin.tar
+          # rm release/allbin.tar
+          set +x
+
           ls -l release/
       - name: Release
         uses: softprops/action-gh-release@v1
