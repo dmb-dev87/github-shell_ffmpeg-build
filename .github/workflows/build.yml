@@ -90,17 +90,13 @@ jobs:
         run: |
           mkdir artifacts/release/
           cd artifacts/
-          find . 
-
           for dir in */
           do
             name=$(basename $dir)
-            echo "name=$name dir=$dir"
-            cd $name/bin
-            tar czf $name.tgz  ff*
-            mv $name.tgz ../../
-            cd ..
+            tar czf release/$name.tar.gz -C $(dirname $dir) $name
           done
+
+          find . -wholeame "*/bin/ff*" -exec tar -rvzf release/allbin.tar.gz {} +
 
           ls -l release/
       - name: Release
