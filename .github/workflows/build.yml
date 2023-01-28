@@ -96,7 +96,8 @@ jobs:
             tar czf release/$name.tar.gz -C $(dirname $dir) $name
           done
 
-          find . -wholeame "*/bin/ff*" -exec tar -rvzf release/allbin.tar.gz {} +
+          find . -wholeame "*/bin/ff*" -exec tar -rvf allbin.tar {} +
+          tar -czvf release/allbin.tar.tar.gz allbin.tar
 
           ls -l release/
       - name: Release
