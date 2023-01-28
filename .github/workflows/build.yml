@@ -96,9 +96,12 @@ jobs:
             tar czf release/$name.tar.gz -C $(dirname $dir) $name
           done
 
-          find . -wholeame "*/bin/ff*" -exec tar -rvf allbin.tar {} +
+          set -x
+          find . -wholename "*/bin/ff*" -exec tar -rvf release/allbin.tar {} +
           tar -czvf release/allbin.tar.tar.gz allbin.tar
-
+          rm release/allbin.tar
+          set +x
+          
           ls -l release/
       - name: Release
         uses: softprops/action-gh-release@v1
