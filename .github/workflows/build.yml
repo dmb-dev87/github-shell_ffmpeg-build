@@ -90,11 +90,18 @@ jobs:
         run: |
           mkdir artifacts/release/
           cd artifacts/
-          for dir in ffmpeg-*/ffmpeg-*
+
+          for dir in */
           do
             name=$(basename $dir)
-            tar czf release/$name.tar.gz -C $(dirname $dir) $name
+            find $name/bin
+            echo "name=$name dir=$dir"
+            cd $name/bin
+            tar czf $name.tgz  ff*
+            mv $name.tgz ../../
+            # cd ..
           done
+
           ls -l release/
       - name: Release
         uses: softprops/action-gh-release@v1
