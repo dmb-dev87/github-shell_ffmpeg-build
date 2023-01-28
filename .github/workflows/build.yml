@@ -67,7 +67,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Install dependencies
-        run: brew install yasm subversion
+        run: brew install yasm nasm subversion
       - name: Build
         run: ./build-macos.sh
       - name: Archive artifacts
