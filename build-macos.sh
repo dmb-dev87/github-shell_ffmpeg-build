@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -eux
+set -eu
 
 # TODO: Compile and link LAME using ARCH. Add include/lib paths for LAME to ffmpeg configure flats. Add required LAME to ff
 
@@ -8,7 +8,7 @@ cd $(dirname $0)
 BASE_DIR=$(pwd)
 
 
-./build-lame.sh
+# ./build-lame.sh
 
 
 source common.sh
@@ -18,6 +18,11 @@ then
 	curl -O $FFMPEG_TARBALL_URL
 fi
 
+#           - x86_64-apple-macos10.9
+#           - arm64-apple-macos11
+
+
+TARGET="arm64-apple-macos11"
 : ${TARGET?}
 
 case $TARGET in
@@ -30,27 +35,27 @@ case $TARGET in
 	host="aarch64-apple-darwin"
         ;;
     *)
-        echo "Unknown target: $TARGET"
+        echo "Unknown target: $TARGET.  Specifcy TARGET=arm64-apple-macos11 or x86_64-apple-macos10.9"
         exit 1
         ;;
 esac
 
 OUTPUT_DIR=artifacts/ffmpeg-$FFMPEG_VERSION-audio-$TARGET
 
-BUILD_DIR=$BASE_DIR/$(mktemp -d build.XXXXXXXX)
-trap 'rm -rf $BUILD_DIR' EXIT
+BUILD_DIR=$BASE_DIR/$(mktemp -d workdir.XXXXXXXX)
+# TODO: takeout trap 'rm -rf $BUILD_DIR' EXIT
 
 cd $BUILD_DIR
 tar --strip-components=1 -xf $BASE_DIR/$FFMPEG_TARBALL
-
+PREFIX=$BASE_DIR/$OUTPUT_DIR
 FFMPEG_CONFIGURE_FLAGS+=(
     --cc=/usr/bin/clang
-    --prefix=$BASE_DIR/$OUTPUT_DIR
+    --prefix=$PREFIX
     --enable-cross-compile
     --target-os=darwin
     --arch=$ARCH
-    --extra-ldflags="-target $TARGET"
-    --extra-cflags="-target $TARGET"
+    --extra-ldflags="-target $TARGET -L$PREFIX/lib"
+    --extra-cflags="-target $TARGET -I$PREFIX/include"
     --enable-runtime-cpudetect
 )
 
@@ -58,24 +63,19 @@ FFMPEG_CONFIGURE_FLAGS+=(
 
 # Build lame
 PREFIX=$BASE_DIR/$OUTPUT_DIR
-FFMPEG_CONFIGURE_FLAGS+=(--prefix=$PREFIX)
 
 
 do_svn_checkout https://svn.code.sf.net/p/lame/svn/trunk/lame lame_svn
   cd lame_svn
     echo "Compiling lame: prefix $PREFIX"
-    ./configure --enable-nasm --disable-decoder --prefix=$PREFIX --enable-static --disable-shared --host=$host
+    ./configure --enable-nasm --disable-decoder --disable-frontend --prefix=$PREFIX --enable-static --disable-shared --host=$host
+
     make -j8
     make install
   cd ..
 echo "compiled LAME... "
 
-
-FFMPEG_CONFIGURE_FLAGS+=(--extra-cflags="-I$PREFIX/include")
-FFMPEG_CONFIGURE_FLAGS+=(--extra-ldflags="-L$PREFIX/lib")
-
 echo "configure ffmpeg: ${FFMPEG_CONFIGURE_FLAGS[@]}"
-
 
 
 
@@ -85,5 +85,5 @@ perl -pi -e 's{HAVE_MACH_MACH_TIME_H 1}{HAVE_MACH_MACH_TIME_H 0}' config.h
 
 make V=1
 make install
-
+find $BASE_DIR/$OUTPUT_DIR 
 chown -R $(stat -f '%u:%g' $BASE_DIR) $BASE_DIR/$OUTPUT_DIR
