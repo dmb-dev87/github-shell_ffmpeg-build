@@ -4,34 +4,27 @@ set -eu
 
 cd $(dirname $0)
 BASE_DIR=$(pwd)
-echo "step1......"
 
-echo $BASE_DIR
 
 source common.sh
 
-if [ ! -e $FFMPEG_TARBALL ]
-then
-	curl -s -L -O $FFMPEG_TARBALL_URL
-fi
 ARCH=x86_64
 host=x86_64-w64-mingw32
 
 : ${ARCH?}
 
-OUTPUT_DIR=artifacts/ffmpeg-$FFMPEG_VERSION-audio-$ARCH-w64-mingw32
+OUTPUT_DIR=artifacts/ffmpeg-$FFMPEG_VERSION-audio-$ARCH-win
 
 BUILD_DIR=$(mktemp -d -p $(pwd) build.XXXXXXXX)
 # TODO: PUT BACK IN trap 'rm -rf $BUILD_DIR' EXIT
 
+extract_ffmpeg $BUILD_DIR
+
 cd $BUILD_DIR
-tar --strip-components=1 -xf $BASE_DIR/$FFMPEG_TARBALL
+# tar --strip-components=1 -xf $BASE_DIR/$FFMPEG_TARBALL
 
 
 PREFIX=$BASE_DIR/$OUTPUT_DIR
-CF="-static -static-libgcc -static-libstdc++ -I$PREFIX/include"
-# CF="'$CF'"
-echo "CF=$CF"
 
 FFMPEG_CONFIGURE_FLAGS+=(
     --prefix=$PREFIX
@@ -50,6 +43,7 @@ echo "test ./configure ${FFMPEG_CONFIGURE_FLAGS[@]}"
 PREFIX=$BASE_DIR/$OUTPUT_DIR
 FFMPEG_CONFIGURE_FLAGS+=(--prefix=$PREFIX)
 
+build_lame "--disable-decoder --prefix=$PREFIX --enable-static --disable-shared --host=$host"
 
 do_svn_checkout https://svn.code.sf.net/p/lame/svn/trunk/lame lame_svn
   cd lame_svn

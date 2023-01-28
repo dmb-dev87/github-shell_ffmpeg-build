@@ -25,6 +25,37 @@ do_svn_checkout() {
   fi
 }
 
+build_lame()
+{
+do_svn_checkout https://svn.code.sf.net/p/lame/svn/trunk/lame lame_svn
+  cd lame_svn
+    echo "Compiling lame with config: $1"
+    ./configure "$1"
+    make -j8
+    make install
+  cd ..
+echo "compiled LAME... $PREFIX "
+}
+
+
+extract_ffmpeg()
+{
+
+if [ ! -e $FFMPEG_TARBALL ]
+then
+        curl -O $FFMPEG_TARBALL_URL
+fi
+
+
+cd $BUILD_DIR
+
+tar --strip-components=1 -xf $BASE_DIR/$FFMPEG_TARBALL
+
+# TODO: Apply patch(s)
+
+}
+
+
 
 FFMPEG_CONFIGURE_FLAGS=(
 --disable-everything
@@ -53,8 +84,7 @@ FFMPEG_CONFIGURE_FLAGS=(
 --enable-demuxer=apng
 --enable-demuxer=mjpeg
 --enable-libmp3lame
---enable-debug=3
---disable-optimizations
+--enable-optimizations
 --disable-ffplay
 --enable-ffmpeg
 --enable-ffprobe

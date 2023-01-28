@@ -1,28 +1,13 @@
 #!/usr/bin/env bash
-
+# run with TARGET=x86_64-apple-macos10.9 ./build-macos.sh (for example)
 set -eu
 
-# TODO: Compile and link LAME using ARCH. Add include/lib paths for LAME to ffmpeg configure flats. Add required LAME to ff
 
 cd $(dirname $0)
 BASE_DIR=$(pwd)
 
-
-# ./build-lame.sh
-
-
 source common.sh
 
-if [ ! -e $FFMPEG_TARBALL ]
-then
-	curl -O $FFMPEG_TARBALL_URL
-fi
-
-#           - x86_64-apple-macos10.9
-#           - arm64-apple-macos11
-
-
-#: ${TARGET?}
 
 case $TARGET in
     x86_64-*)
@@ -41,7 +26,6 @@ esac
 
 OUTPUT_DIR=artifacts/ffmpeg-$FFMPEG_VERSION-audio-$TARGET
 
-# BUILD_DIR=$BASE_DIR/$(mktemp -d workdir.XXXXXXXX)
 BUILD_DIR=$BASE_DIR/workdir.$TARGET
 rm -rf $BUILD_DIR
 mkdir $BUILD_DIR
@@ -49,8 +33,13 @@ mkdir $BUILD_DIR
 
 # TODO: takeout trap 'echo "failed $BUILD_DR " && rm -rf $BUILD_DIR' EXIT
 
+
+extract_ffmpeg $BUILD_DIR
 cd $BUILD_DIR
-tar --strip-components=1 -xf $BASE_DIR/$FFMPEG_TARBALL
+
+
+
+
 PREFIX=$BASE_DIR/$OUTPUT_DIR
 FFMPEG_CONFIGURE_FLAGS+=(
     --cc=/usr/bin/clang
@@ -69,7 +58,6 @@ FFMPEG_CONFIGURE_FLAGS+=(
 # Build lame
 PREFIX=$BASE_DIR/$OUTPUT_DIR
 
-
 do_svn_checkout https://svn.code.sf.net/p/lame/svn/trunk/lame lame_svn
   cd lame_svn
   LAMEC="--enable-nasm --disable-decoder --enable-frontend --prefix=$PREFIX --enable-static --disable-shared --host=$host --enable-cross-compile --target=$TARGET"
@@ -86,20 +74,16 @@ do_svn_checkout https://svn.code.sf.net/p/lame/svn/trunk/lame lame_svn
 
   cd ..
 echo "compiled LAME...$LAMEC "
-echo "pwd=`pwd`"
 
-
-lipo -info $BASE_DIR/$OUTPUT_DIR/lib/libmp3lame.a
 
 echo "configure ffmpeg: ${FFMPEG_CONFIGURE_FLAGS[@]}"
-
 
 
 ./configure "${FFMPEG_CONFIGURE_FLAGS[@]}" || (cat ffbuild/config.log && exit 1)
 
 perl -pi -e 's{HAVE_MACH_MACH_TIME_H 1}{HAVE_MACH_MACH_TIME_H 0}' config.h
 
-make V=1
+make #  V=1
 make install
-find $BASE_DIR/$OUTPUT_DIR 
+find $BASE_DIR/$OUTPUT_DIR | grep bin
 chown -R $(stat -f '%u:%g' $BASE_DIR) $BASE_DIR/$OUTPUT_DIR
