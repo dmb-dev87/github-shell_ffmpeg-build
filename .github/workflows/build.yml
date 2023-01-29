@@ -101,13 +101,18 @@ jobs:
           # Goal was to get all copies of ffmpeg and ffprobe into one tar. 
           set -x
           echo "create all binaries"
-          find . -wholename "*/bin/ff*"
           find . -wholename "*/bin/ff*" -exec tar -rvf allbin.tar {} +
           tar -czvf release/allbin.tar.gz allbin.tar
           rm allbin.tar
           set +x
-
           ls -l release/
+      # upload this so it is available to download in action artifacts.    
+      - name: Archive artifacts
+        uses: actions/upload-artifact@v1
+        with:
+          name: allbin.tar.gz
+          path: artifacts/releease/allbin.tar.gz
+
       - name: Release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/v')
