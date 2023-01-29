@@ -111,7 +111,7 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
           name: allbin.tar.gz
-          path: artifacts/releease/allbin.tar.gz
+          path: artifacts/release/allbin.tar.gz
 
       - name: Release
         uses: softprops/action-gh-release@v1
