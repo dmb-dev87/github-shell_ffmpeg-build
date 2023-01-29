@@ -67,7 +67,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Install dependencies
-        run: brew install yasm subversion
+        run: brew install yasm nasm subversion
       - name: Build
         run: ./build-macos.sh
       - name: Archive artifacts
@@ -95,6 +95,18 @@ jobs:
             name=$(basename $dir)
             tar czf release/$name.tar.gz -C $(dirname $dir) $name
           done
+
+          
+          # this isn't working. Getting error tar: release: file changed as we read it
+          # Goal was to get all copies of ffmpeg and ffprobe into one tar. 
+          set -x
+          echo "create all binaries"
+          find . -wholename "*/bin/ff*"
+          find . -wholename "*/bin/ff*" -exec tar -rvf release/allbin.tar {} +
+          # tar -czvf release/allbin.tar.tar.gz release/allbin.tar
+          # rm release/allbin.tar
+          set +x
+
           ls -l release/
       - name: Release
         uses: softprops/action-gh-release@v1
