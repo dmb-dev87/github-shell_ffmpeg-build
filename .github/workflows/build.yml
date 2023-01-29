@@ -102,9 +102,9 @@ jobs:
           set -x
           echo "create all binaries"
           find . -wholename "*/bin/ff*"
-          find . -wholename "*/bin/ff*" -exec tar -rvf release/allbin.tar {} +
-          # tar -czvf release/allbin.tar.tar.gz release/allbin.tar
-          # rm release/allbin.tar
+          find . -wholename "*/bin/ff*" -exec tar -rvf allbin.tar {} +
+          tar -czvf release/allbin.tar.tar.gz allbin.tar
+          rm release/allbin.tar
           set +x
 
           ls -l release/
