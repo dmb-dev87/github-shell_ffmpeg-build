@@ -60,8 +60,14 @@ tar --strip-components=1 -xf $BASE_DIR/$FFMPEG_TARBALL
 
 
 FFMPEG_CONFIGURE_FLAGS=(
---enable-static 
---disable-shared 
+--disable-shared
+--enable-static
+--enable-pic
+--disable-doc
+--disable-debug
+--disable-avdevice
+--disable-swscale
+--disable-programs
 --enable-encoders 
 --enable-decoders 
 --disable-muxers 

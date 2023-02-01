@@ -96,22 +96,24 @@ jobs:
             tar czf release/$name.tar.gz -C $(dirname $dir) $name
           done
 
-          
-          # this isn't working. Getting error tar: release: file changed as we read it
-          # Goal was to get all copies of ffmpeg and ffprobe into one tar. 
-          set -x
-          echo "create all binaries"
-          find . -wholename "*/bin/ff*" -exec tar -rvf allbin.tar {} +
-          tar -czvf release/allbin.tar.gz allbin.tar
-          rm allbin.tar
-          set +x
-          ls -l release/
+          mkdir apps
+          mkdir apps/win_x86_64
+          mkdir apps/mac_x86_64
+          mkdir apps/mac_arm64
+          mkdir apps/linux_x86_64
+
+          cp ./ffmpeg-windows-x86_64/ffmpeg-5.1.2-audio-x86_64-win/bin/ff* apps/win_x86_64/
+          cp ./ffmpeg-arm64-apple-macos11/ffmpeg-5.1.2-audio-arm64-apple-macos11/bin/ff* apps/mac_arm64/
+          cp ./ffmpeg-x86_64-apple-macos10.9/ffmpeg-5.1.2-audio-x86_64-apple-macos10.9/bin/ff* apps/mac_x86_64/
+          cp ./ffmpeg-linux-x86_64/ffmpeg-5.1.2-audio-x86_64-linux-gnu/bin/ff* apps/linux_x86_64
+
+         
       # upload this so it is available to download in action artifacts.    
       - name: Archive artifacts
         uses: actions/upload-artifact@v1
         with:
-          name: allbin.tar.gz
-          path: artifacts/release/allbin.tar.gz
+          name: apps
+          path: artifacts/apps
 
       - name: Release
         uses: softprops/action-gh-release@v1
