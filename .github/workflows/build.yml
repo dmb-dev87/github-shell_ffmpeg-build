@@ -96,8 +96,6 @@ jobs:
             tar czf release/$name.tar.gz -C $(dirname $dir) $name
           done
       
-      - name: Make apps
-        run: |
           mkdir apps
           mkdir apps/win_x86_64
           mkdir apps/mac_x86_64
