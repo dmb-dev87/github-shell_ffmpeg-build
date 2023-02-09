@@ -67,7 +67,6 @@ trap 'rm -rf $BUILD_DIR' EXIT
 extract_ffmpeg $BUILD_DIR
 
 cd $BUILD_DIR
-# tar --strip-components=1 -xf $BASE_DIR/$FFMPEG_TARBALL
 
 
 # Build lame

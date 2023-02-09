@@ -45,15 +45,22 @@ extract_ffmpeg()
 
 if [ ! -e $FFMPEG_TARBALL ]
 then
+	echo "curl get $FFMPEG_TARBALL_URL"
         curl -O $FFMPEG_TARBALL_URL
 fi
 
+cp patch.* $BUILD_DIR
 
 cd $BUILD_DIR
 
 tar --strip-components=1 -xf $BASE_DIR/$FFMPEG_TARBALL
 
-# TODO: Apply patch(s)
+
+cp ../patch.* .
+echo "running patch:"
+./patch.sh
+
+#  Apply patch(s)
 
 }
 
