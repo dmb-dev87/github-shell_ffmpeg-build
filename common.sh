@@ -123,4 +123,6 @@ FFMPEG_CONFIGURE_FLAGS=(
 --disable-ffplay 
 --enable-ffmpeg 
 --enable-ffprobe 
+--env=ffmpeg_version=FFMPEG_VERSION
+--env=ffmpeg_builder=github.com/openaudible/ffmpeg-build
 )
