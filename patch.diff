@@ -2,7 +2,7 @@
 > 
 > 
 > 
-4083a4087,4115
+4083a4087,4117
 > 
 >     // additional items supported by some 
 >     mov_write_string_metadata(s, pb, "rldt",    "release_date"     , 1);
@@ -14,8 +14,10 @@
 >     mov_write_string_metadata(s, pb, "SRNM",    "series_name"     , 1);
 >     mov_write_string_metadata(s, pb, "SRSQ",    "series_sequence"     , 1);
 >     mov_write_string_metadata(s, pb, "SRLK",    "series_link"     , 1);
->     mov_write_string_metadata(s, pb, "IRLK",    "info_link"     , 1);   // www link to 
+>     mov_write_string_metadata(s, pb, "\251WWW",    "WWW"     , 1);   // www link to 
 >     mov_write_string_metadata(s, pb, "@PST",    "title_short"     , 1);
+>     mov_write_string_metadata(s, pb, "LANG",    "language"     , 1);
+> 
 >     if (1)  
 >     {
 >         const char * prefix="atom:";
@@ -32,7 +34,7 @@
 >         }
 >     }
 > 
-4085,4086c4117,4118
+4085,4086c4119,4120
 <     mov_write_trkn_tag(pb, mov, s, 0); // track number
 <     mov_write_trkn_tag(pb, mov, s, 1); // disc number
 ---

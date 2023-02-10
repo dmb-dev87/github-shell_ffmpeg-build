@@ -64,9 +64,12 @@ echo "running patch:"
 
 }
 
-
+# add the env at the top as a comment about what version and patches were applied
+# and are printed when ffmpeg/ffprobe starts (with the rest of the configure flags)
 
 FFMPEG_CONFIGURE_FLAGS=(
+--env=ffmpeg_version=$FFMPEG_VERSION
+--env=ffmpeg_builder=github.com/openaudible/ffmpeg-build
 --disable-shared
 --enable-static
 --enable-pic
@@ -123,6 +126,4 @@ FFMPEG_CONFIGURE_FLAGS=(
 --disable-ffplay 
 --enable-ffmpeg 
 --enable-ffprobe 
---env=ffmpeg_version=FFMPEG_VERSION
---env=ffmpeg_builder=github.com/openaudible/ffmpeg-build
 )
