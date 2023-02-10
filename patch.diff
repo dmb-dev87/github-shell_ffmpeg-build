@@ -1,9 +1,26 @@
-4087a4088,4103
->     if (1)  // BEGIN OpenAudible Patch
+4049a4050,4052
+> 
+> 
+> 
+4083a4087,4115
+> 
+>     // additional items supported by some 
+>     mov_write_string_metadata(s, pb, "rldt",    "release_date"     , 1);
+>     mov_write_string_metadata(s, pb, "\251nrt",    "narrated_by"     , 1);
+>     mov_write_string_metadata(s, pb, "\251pub",    "publisher"     , 1);
+>     mov_write_string_metadata(s, pb, "JSON",    "json64"     , 1);  // base64 encoded json
+>     mov_write_string_metadata(s, pb, "CDEK",    "asin"     , 1);
+>     mov_write_string_metadata(s, pb, "prID",    "product_id"     , 1);
+>     mov_write_string_metadata(s, pb, "SRNM",    "series_name"     , 1);
+>     mov_write_string_metadata(s, pb, "SRSQ",    "series_sequence"     , 1);
+>     mov_write_string_metadata(s, pb, "SRLK",    "series_link"     , 1);
+>     mov_write_string_metadata(s, pb, "IRLK",    "info_link"     , 1);   // www link to 
+>     mov_write_string_metadata(s, pb, "@PST",    "title_short"     , 1);
+>     if (1)  
 >     {
 >         const char * prefix="atom:";
 >         // Allow insertion of additional meta data into apple itunes ilst atom/
->         // Only inserts meta (strings) if metadata starts with prefix = atom:
+>         // Only inserts meta (strings) if metadata in form of atom:xxxx
 >         const AVDictionaryEntry *t = NULL;     
 >         const char * fourcc_name;
 >         while (t = av_dict_get(s->metadata, "", t, AV_DICT_IGNORE_SUFFIX)) {
@@ -15,3 +32,9 @@
 >         }
 >     }
 > 
+4085,4086c4117,4118
+<     mov_write_trkn_tag(pb, mov, s, 0); // track number
+<     mov_write_trkn_tag(pb, mov, s, 1); // disc number
+---
+>     mov_write_trkn_tag(pb, mov, s, 0); // "trkn" track number
+>     mov_write_trkn_tag(pb, mov, s, 1); // "disc" number
