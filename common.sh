@@ -79,6 +79,7 @@ FFMPEG_CONFIGURE_FLAGS=(
 --enable-swscale
 --disable-programs
 --enable-encoders 
+--enable-decoders 
 --disable-muxers 
 --disable-demuxers 
 --disable-protocols 
