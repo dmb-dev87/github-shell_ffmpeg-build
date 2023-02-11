@@ -66,10 +66,13 @@ echo "running patch:"
 
 # add the env at the top as a comment about what version and patches were applied
 # and are printed when ffmpeg/ffprobe starts (with the rest of the configure flags)
+DATE=`date '+%Y%m%d%H%M%S'`
+echo "Compile date: $DATE"
+BINFO="$FFMPEG_VERSION,compiled_$DATE,github.com/openaudible/ffmpeg-build"
+
 
 FFMPEG_CONFIGURE_FLAGS=(
---env=ffmpeg_version=$FFMPEG_VERSION
---env=ffmpeg_builder=github.com/openaudible/ffmpeg-build
+--env=OAINFO="$BINFO"
 --disable-shared
 --enable-static
 --enable-pic
