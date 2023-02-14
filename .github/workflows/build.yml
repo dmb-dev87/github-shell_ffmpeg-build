@@ -45,7 +45,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update -y && \
-          sudo apt-get install -y yasm mingw-w64 subversion
+          sudo apt-get install -y yasm mingw-w64 subversion zlib-devel
       - name: Build
         run: ./build-windows.sh
       - name: Archive production artifacts
