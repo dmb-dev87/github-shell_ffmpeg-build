@@ -90,6 +90,7 @@ FFMPEG_CONFIGURE_FLAGS=(
 --disable-filters 
 --disable-network
 --disable-bsfs 
+--enable-zlib
 --enable-protocol=file 
 --enable-muxer=ffmetadata 
 --enable-demuxer=ffmetadata 
